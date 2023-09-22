@@ -52,3 +52,21 @@ FROM CustomerSummaryCTE;
 -- Next, using the CTE, create the query to generate the final customer summary report, which should include: customer name, email, rental_count,
 --  total_paid and average_payment_per_rental, this last column is a derived column from total_paid and rental_count.
 
+WITH CustomerSummaryCTE AS (
+  SELECT 
+    rc.first_name,
+    rc.email,
+    rc.rental_count,
+    cp.total_paid,
+    cp.total_paid / rc.rental_count AS average_payment_per_rental
+  FROM Rental_info_customers AS rc
+  JOIN customer_payment AS cp ON rc.customer_id = cp.customer_id
+)
+
+SELECT
+  first_name AS "Customer Name",
+  email AS "Email",
+  rental_count AS "Rental Count",
+  total_paid AS "Total Paid",
+  average_payment_per_rental AS "Average Payment per Rental"
+FROM CustomerSummaryCTE;
